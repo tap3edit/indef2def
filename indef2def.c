@@ -96,7 +96,7 @@ long pos=0;         /* Current position in file. */
 int  all_file=0;    /* Converts all file */
 
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     FILE*               file, *outfile;
     char*               inFilename, *outFilename;
@@ -109,7 +109,7 @@ main(int argc, char **argv)
 
     if (argc != 3 && argc != 4)
     {
-        fprintf(stderr, "Copyright (c) 2016 Javier Gutierrez. (http://www.tap3edit.com)\n");
+        fprintf(stderr, "Copyright (c) 2007-2018 Javier Gutierrez. (https://github.com/tap3edit/indef2def)\n");
         fprintf(stderr, "Usage: %s [ -a ] infilename outfilename\n", argv[0]);
         fprintf(stderr, "   -a : converts all file\n");
         exit(1);
@@ -192,6 +192,8 @@ main(int argc, char **argv)
 
     fclose(file);
     fclose(outfile);
+
+    return(EXIT_SUCCESS);
 }
 
 /****************************************************************************
@@ -237,7 +239,7 @@ int write_tap(
 
         if (decode_tag(file, &a_item)==-1)
         {
-            fprintf(stderr, "Error decoding tag at position: %d\n", pos);
+            fprintf(stderr, "Error decoding tag at position: %ld\n", pos);
             return -1;
         }
 
@@ -248,7 +250,7 @@ int write_tap(
 
         if (decode_size(file, &a_item)==-1)
         {
-            fprintf(stderr, "Error decoding size at position: %d\n", pos);
+            fprintf(stderr, "Error decoding size at position: %ld\n", pos);
             return -1;
         }
 
@@ -279,7 +281,7 @@ int write_tap(
             {
                 if ( pos != (*len_list)->pos )
                 {
-                    fprintf(stderr, "Mismatch with list of indefinite Length.  pos: %d, (*len_list)->pos: %d\n", pos, (*len_list)->pos );
+                    fprintf(stderr, "Mismatch with list of indefinite Length.  pos: %ld, (*len_list)->pos: %ld\n", pos, (*len_list)->pos );
                     return -1;
                 }
 
@@ -312,7 +314,7 @@ int write_tap(
                         fputc(fgetc(file), outfile);
                         if(feof(file))
                         {
-                            fprintf(stderr, "Found end of file too soon at position: %d\n", pos);
+                            fprintf(stderr, "Found end of file too soon at position: %ld\n", pos);
                             return -1;
                         }
                     }
@@ -403,7 +405,7 @@ int collect_indef(
 
         if (decode_tag(file, &a_item)==-1)
         {
-            fprintf(stderr, "Error decoding tag at position: %d\n", pos);
+            fprintf(stderr, "Error decoding tag at position: %ld\n", pos);
             return -1;
         }
 
@@ -416,7 +418,7 @@ int collect_indef(
 
         if (decode_size(file, &a_item)==-1)
         {
-            fprintf(stderr, "Error decoding size at position: %d\n", pos);
+            fprintf(stderr, "Error decoding size at position: %ld\n", pos);
             return -1;
         }
 
@@ -470,7 +472,7 @@ int collect_indef(
                     buffin=fgetc(file);
                     if(feof(file))
                     {
-                        fprintf(stderr, "Found end of file too soon at position: %d\n", pos);
+                        fprintf(stderr, "Found end of file too soon at position: %ld\n", pos);
                         return -1;
                     }
                 }
@@ -488,7 +490,7 @@ int collect_indef(
             if (!a_item.pc)
             {
                 /* 2.4.2.1. Primitive !!?? */
-                fprintf(stderr, "Primitive Tag item with Indefinite Length at pos: %d\n", pos );
+                fprintf(stderr, "Primitive Tag item with Indefinite Length at pos: %ld\n", pos );
                 return -1;
             }
 
@@ -583,7 +585,7 @@ int decode_tag(
     buffin=fgetc(file);
     if(feof(file))
     {
-        fprintf(stderr, "Found end of file too soon at position: %d\n", pos);
+        fprintf(stderr, "Found end of file too soon at position: %ld\n", pos);
         return -1;
     }
     pos++;
@@ -608,7 +610,7 @@ int decode_tag(
             buffin=fgetc(file);
             if(feof(file))
             {
-                fprintf(stderr, "Found end of file too soon at position: %d\n", pos);
+                fprintf(stderr, "Found end of file too soon at position: %ld\n", pos);
                 return -1;
             }
             pos++;
@@ -625,7 +627,7 @@ int decode_tag(
 
         if ( i>3 )
         {
-            fprintf(stderr, "Found tag bigger than 4 bytes at position: %d\n", pos);
+            fprintf(stderr, "Found tag bigger than 4 bytes at position: %ld\n", pos);
             return -1;
         }
 
@@ -680,7 +682,7 @@ int decode_size(
     buffin=fgetc(file);
     if(feof(file))
     {
-        fprintf(stderr, "Found end of file too soon at position: %d\n", pos);
+        fprintf(stderr, "Found end of file too soon at position: %ld\n", pos);
         return -1;
     }
     pos++;
@@ -703,7 +705,7 @@ int decode_size(
             buffin=fgetc(file);
             if(feof(file))
             {
-                fprintf(stderr, "Found end of file too soon at position: %d\n", pos);
+                fprintf(stderr, "Found end of file too soon at position: %ld\n", pos);
                 return -1;
             }
             pos++;
@@ -716,7 +718,7 @@ int decode_size(
 
         if ( i>7 )
         {
-            fprintf(stderr, "Found size bigger than 8 bytes at position: %d\n", pos);
+            fprintf(stderr, "Found size bigger than 8 bytes at position: %ld\n", pos);
             return -1;
         }
 
@@ -807,7 +809,7 @@ int encode_size(
 
         if (size1_oct>7)
         {
-            fprintf(stderr, "Found size bigger than 8 bytes at position: %d\n", pos);
+            fprintf(stderr, "Found size bigger than 8 bytes at position: %ld\n", pos);
             return -1;
         }
 
